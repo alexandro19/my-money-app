@@ -15,7 +15,15 @@ export function getList(){
 }
 
 export function create(values){
-  submit(values, 'post')  
+  return submit(values, 'post')  
+}
+
+export function update(values){
+  return submit(values, 'put')
+}
+
+export function remove(values){
+  return submit(values, 'delete')
 }
 
 export function showUpdate(billingCycle){
@@ -26,21 +34,25 @@ export function showUpdate(billingCycle){
   ]
 }
 
-export function update(values){
-  submit(values, 'put')
+export function showDelete(billingCycle){
+  return [
+    showTabs('tabDelete'),
+    selectedTab('tabDelete'),
+    initialize('billingCycleForm', billingCycle)
+  ]
 }
 
-function submit(values, method){
+function submit(values, method) {
   return dispatch => {
-    const id = values._id ? values._id : '' 
+    const id = values._id ? values._id : ''
     axios[method](`${BASE_URL}/billingCycles/${id}`, values)
-    .then(resp => {
-      toastr.success('Sucesso', 'Operação realizada com sucesso!')
-      dispatch(init())
-    })
-    .catch(err => {
-      err.response.data.errors.forEach(error => toastr.error('Erro', error))
-    })
+      .then(resp => {
+          toastr.success('Sucesso', 'Operação Realizada com sucesso.')
+          dispatch(init())
+      })
+      .catch(e => {
+          e.response.data.errors.forEach(error => toastr.error('Erro', error))
+      })
   }
 }
 
@@ -52,6 +64,3 @@ export function init(){
     initialize('billingCycleForm', INITIAL_VALUES)
   ]
 }
-
-
-
